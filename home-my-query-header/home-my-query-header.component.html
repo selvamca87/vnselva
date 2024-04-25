@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-2">
+    <ds-form-field>
+      <label ds-label for="queryTypes"> {{ 'Query Types' | translate }}</label>
+      <input
+        [(ngModel)]="mySavedQuery.queryType"
+        id="queryTypes"
+        ds-input
+        ds-autosuggest
+        [numberOfFetchedItems]="100"
+        [customFilter]="queryTypesSuggestions"
+        [minCharsToFilter]="0"
+        [showSuggestionBoxOnFocus]="true"
+      />
+    </ds-form-field>
+  </div>
+
+  <div class="col-4">
+    <ds-form-field>
+      <label ds-label for="query"> {{ 'Query' | translate }}</label>
+      <input type="text" ds-input id="query" [(ngModel)]="mySavedQuery.query" />
+    </ds-form-field>
+  </div>
+  <div class="col-3">
+    <button class="updatebtn" (click)="onUpdateQuerySearch()" [variant]="'primary'" data-testId="update" ds-button>
+      {{ 'button.update' | translate }}
+    </button>
+  </div>
+  <div class="col-3">
+    <vdcn-home-my-query-filter
+      [queryResult]="queryResult"
+      (selectAllQueryItems)="selectAllQueryItems.emit($event)"
+      (navigateToKrViewer)="navigateToKrViewer.emit($event)"
+      (addQueryResultToFavourites)="addQueryResultToFavourites.emit($event)"
+      [selectedQueryResult]="selectedQueryResult"
+    ></vdcn-home-my-query-filter>
+  </div>
+</div>

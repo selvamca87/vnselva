@@ -1,0 +1,212 @@
+<div class="search-menu-container">
+  <ds-tabs
+    [ngClass]="{ 'search-simple-tab': hideItems }"
+    [(activeTabId)]="activeId"
+    [growLabels]="true"
+    [guardSelectionChange]="false"
+    (activeTabIdChange)="onRequestSelectionChange($event)"
+  >
+    <ds-tabs-label icon="search" for="simple_search">{{ 'homeSearch.simpleSearchs' | translate }}</ds-tabs-label>
+    <ds-tabs-content class="meta-overview-tab row" id="simple_search">
+      <div class="row home-page-sticky-portion">
+        <div class="col-xl-9 col-lg-7 col-md-12">
+          <vdcn-home-simple-search
+            class="simple-search"
+            [loadCases]="loadCases$ | async"
+            [parentForm]="form"
+            [productLines]="productLines$ | async"
+            [queryTypes]="(fileFilterSettings$ | async)!.options"
+            [timePeriods]="timePeriods$ | async"
+            [vehicles]="vehicles$ | async"
+            [showLoadingIndicator]="showLoadingIndicator$ | async"
+            (showFilterOptions)="showFilterOption(!showFilters)"
+            [mobilescreen]="mobilescreen"
+          ></vdcn-home-simple-search>
+        </div>
+        <div [ngClass]="{ 'row-margin-set': smallScreen }" class="col-xl-3 col-lg-5 col-md-6">
+          <vdcn-home-search-filter
+            [parentForm]="form"
+            (selectAllFilteredFiles)="onselectAllFilteredFiles($event)"
+            [fileSearchResults]="fileSearchResults$ | async"
+            [filteredResults]="filteredFileSearchResults$ | async"
+            [selectedSearchResults]="selectedSearchResults$ | async"
+            (addOrRemoveSelectedItemToFavourites)="onAddOrRemoveSelectedItemToFavourites($event)"
+            (navigateToKrViewer)="onNavigateToKrViewer($event)"
+            [mobilescreen]="mobilescreen"
+          >
+          </vdcn-home-search-filter>
+        </div>
+      </div>
+      <div class="row filter-section" *ngIf="(showLoadingIndicator$ | async) === false">
+        <ng-container *ngIf="showFilters">
+          <vdcn-file-search-filters
+            (addKrDocument)="addKrDocuments()"
+            (addKrValue)="addKrValues()"
+            (deleteKrDocument)="deleteKrDocuments($event)"
+            (deleteKrValue)="deleteKrValues($event)"
+            [keyResultDocuments]="krDocuments$ | async"
+            [keyResultValues]="krValues$ | async"
+            [krDocuments]="krDocuments"
+            [krValues]="krValues"
+            [parentForm]="form"
+          ></vdcn-file-search-filters>
+        </ng-container>
+        <div *ngIf="(showLoadingIndicator$ | async) === false">
+          <ng-container *ngIf="!showFilters && !(fileSearchResults$ | async)?.length" class="filter-section">
+            <vdcn-file-search-not-found></vdcn-file-search-not-found>
+          </ng-container>
+        </div>
+      </div>
+      <div class="search-results">
+        <div *ngIf="showLoadingIndicator$ | async" class="file-search-container-loader">
+          <div class="loader">
+            <ds-progress-circle class="progress-circle loader" variant="indeterminate"></ds-progress-circle>
+            <span class="loader"> {{ 'backend.loading' | translate }}</span>
+          </div>
+        </div>
+        <ng-container *ngIf="(showLoadingIndicator$ | async) === false">
+          <ng-container *ngIf="!showFilters && !!(fileSearchResults$ | async)?.length">
+            <vdcn-home-simple-search-table
+              (filterResults)="onFilterResults($event)"
+              (selectFile)="onSelectFile($event)"
+              (openFile)="onOpenFile($event)"
+              (setFavourite)="onSetFavourite($event)"
+              [fileSearchResults]="fileSearchResults$ | async"
+              [filteredResults]="filteredFileSearchResults$ | async"
+              (selectAllFilteredFiles)="onselectAllFilteredFiles($event)"
+              [parentForm]="form"
+              [selectedSearchResults]="selectedSearchResults$ | async"
+              (openKrViewer)="onOpenKrViewer($event)"
+              [hideItems]="hideItems"
+              [screenHeight]="getScreenHeight"
+            ></vdcn-home-simple-search-table>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ds-tabs-content>
+
+    <ds-tabs-label icon="heart" for="my_favourites">{{ 'homeSearch.myFavourites' | translate }}</ds-tabs-label>
+    <ds-tabs-content class="meta-overview-tab row" id="my_favourites">
+      <div class="row home-page-sticky-portion">
+        <div class="col-7"></div>
+
+        <div class="col-5">
+          <vdcn-home-favourties-filter
+            (selectAllFavoritesFilteredFiles)="onSelectAllFavoritesFilteredFiles($event)"
+            (selectAllFilteredFiles)="onselectAllFilteredFiles($event)"
+            [parentForm]="form"
+            [myFavourites]="myFavourites$ | async"
+            (navigateToKrViewer)="onNavigateToKrViewer($event)"
+            (addOrRemoveSelectedItemToFavourites)="onAddOrRemoveSelectedItemToFavourites($event)"
+            [filteredResults]="filteredFileSearchResults$ | async"
+          >
+          </vdcn-home-favourties-filter>
+        </div>
+      </div>
+
+      <div class="search-results filter-section">
+        <div *ngIf="showLoadingIndicator$ | async" class="file-search-container-loader">
+          <div class="loader">
+            <ds-progress-circle class="progress-circle loader" variant="indeterminate"></ds-progress-circle>
+            <span class="loader"> {{ 'backend.loading' | translate }}</span>
+          </div>
+        </div>
+        <ng-container>
+          <ng-container>
+            <vdcn-home-favourites-table
+              (filterResults)="onFilterResults($event)"
+              (selectFile)="onSelectFile($event)"
+              (openFile)="onOpenFile($event)"
+              (setFavourite)="onSetFavourite($event)"
+              (selectAllFilteredFiles)="onselectAllFilteredFiles($event)"
+              [parentForm]="form"
+              [filteredResults]="filteredFileSearchResults$ | async"
+              (openKrViewer)="onOpenKrViewer($event)"
+              [hideItems]="hideItems"
+            ></vdcn-home-favourites-table>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ds-tabs-content>
+    <ds-tabs-label icon="save" *ngIf="hideItems" for="my_saved_query">{{ 'homeSearch.mySavedQuery' | translate }}</ds-tabs-label>
+    <ds-tabs-content class="meta-overview-tab row" id="my_saved_query">
+      <div *ngIf="showQueryTab">
+        <div class="home-page-sticky-portion">
+          <vdcn-home-my-query-header
+            [types]="types"
+            [queryResult]="queryResult$ | async"
+            (getQueryResult)="getQueryResult($event)"
+            (selectAllQueryItems)="selectAllItems($event)"
+            [selectedQueryResult]="selectedQueryResult$ | async"
+            (navigateToKrViewer)="onNavigateToKrViewer($event)"
+            (addQueryResultToFavourites)="addAndRemoveSelectedResultToFavourites($event)"
+          ></vdcn-home-my-query-header>
+        </div>
+        <div class="search-results filter-section">
+          <div *ngIf="showLoadingIndicator$ | async" class="file-search-container-loader">
+            <div class="loader">
+              <ds-progress-circle class="progress-circle loader" variant="indeterminate"></ds-progress-circle>
+              <span class="loader"> {{ 'backend.loading' | translate }}</span>
+            </div>
+          </div>
+          <ng-container *ngIf="(showLoadingIndicator$ | async) === false">
+            <ng-container>
+              <vdcn-home-my-query-table
+                (selectQueryResultItem)="selectSingleItem($event)"
+                (selectAllQueryItems)="selectAllItems($event)"
+                [queryResult]="queryResult$ | async"
+                [hideItems]="hideItems"
+                (openKrViewer)="onOpenKrViewer($event)"
+                (openFile)="onOpenFile($event)"
+                [selectedQueryResult]="selectedQueryResult$ | async"
+                (setFavouriteQueryItem)="setFavouriteQueryAndMylastResultItem($event)"
+              ></vdcn-home-my-query-table>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ds-tabs-content>
+    <ds-tabs-label icon="calendar" *ngIf="hideItems" for="my_last_results">{{ 'homeSearch.myLastResults' | translate }}</ds-tabs-label>
+    <ds-tabs-content class="meta-overview-tab row" id="my_last_results">
+      <div class="row home-page-sticky-portion">
+        <div class="col-7"></div>
+
+        <div class="col-5">
+          <vdcn-home-my-last-result-filter
+            [myLastResult]="myLastResult$ | async"
+            [selectedMyLastResults]="selectedMyLastResults$ | async"
+            (selectAllMyLastResultItems)="selectAllItems($event)"
+            (navigateToKrViewer)="onNavigateToKrViewer($event)"
+            (addQueryResultToFavourites)="addAndRemoveSelectedResultToFavourites($event)"
+          ></vdcn-home-my-last-result-filter>
+        </div>
+      </div>
+      <div class="search-results filter-section">
+        <div *ngIf="showLoadingIndicator$ | async" class="file-search-container-loader">
+          <div class="loader">
+            <ds-progress-circle class="progress-circle loader" variant="indeterminate"></ds-progress-circle>
+            <span class="loader"> {{ 'backend.loading' | translate }}</span>
+          </div>
+        </div>
+        <ng-container *ngIf="(showLoadingIndicator$ | async) === false">
+          <ng-container>
+            <vdcn-home-my-last-result-table
+              (openKrViewer)="onOpenKrViewer($event)"
+              (openFile)="onOpenFile($event)"
+              [myLastResult]="myLastResult$ | async"
+              [hideItems]="hideItems"
+              (selectAllMyLastResultItems)="selectAllItems($event)"
+              (selectSingleMyResultItem)="selectSingleItem($event)"
+              [selectedMyLastResults]="selectedMyLastResults$ | async"
+              (setFavouriteResultItem)="setFavouriteQueryAndMylastResultItem($event)"
+            ></vdcn-home-my-last-result-table>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ds-tabs-content>
+    <ds-tabs-label icon="zoom_in" *ngIf="hideItems" for="advanced_search">{{ 'homeSearch.advanceSearch' | translate }}</ds-tabs-label>
+    <ds-tabs-content class="meta-overview-tab" id="advanced_search">
+      <ng-container class="row"> </ng-container>
+    </ds-tabs-content>
+  </ds-tabs>
+</div>

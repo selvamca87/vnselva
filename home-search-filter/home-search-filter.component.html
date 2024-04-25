@@ -1,0 +1,57 @@
+<ng-container [formGroup]="parentForm">
+  <div class="row mrgn-top">
+    <div class="col-xl-5 col-lg-6 col-md-6 col-sm-2">
+      <ds-form-field>
+        <input ds-input formControlName="filter" [placeholder]="'fileManager.dialog.simpleSearch.filterResults' | translate" />
+      </ds-form-field>
+    </div>
+    <div [ngClass]="{ 'width-ten-percent': mobilescreen }" class="col-xl-2 col-lg-1 col-md-2 col-sm-1">
+      <ds-button
+        [icon]="'checkbox_checked'"
+        [variant]="'outline'"
+        (click)="onSelectAllFilteredFiles()"
+        title="{{ 'homeSearch.selectUnselectAll' | translate }}"
+      ></ds-button>
+    </div>
+    <div [ngClass]="{ 'width-twentytwo': mobilescreen }" class="col-xl-5 col-lg-4 col-md-4 col-sm-3 action-btns">
+      <button
+        [ds-menu-trigger-for]="subMenuFav"
+        ds-button
+        ds-tooltip=""
+        variant="outline"
+        [icon]="'heart'"
+        title="{{ 'homeSearch.setFavourite' | translate }}"
+      ></button>
+      <div>
+        <ds-menu #subMenuFav>
+          <ng-container>
+            <ds-list-item [class]="'vdcn-dropdown-menu-item'" (click)="onAddToFavourites()">
+              <i class="bi bi-heart-fill heart-icon-red"></i>
+              <span>{{ 'homeSearch.addSelectedFavourites' | translate }}</span>
+            </ds-list-item>
+            <ds-list-item [class]="'vdcn-dropdown-menu-item'" (click)="onRemoveFromFavourites()">
+              <i class="bi bi-heart-fill heart-icon-blue"></i>
+              <span>{{ 'homeSearch.removeSelectedFavourites' | translate }}</span>
+            </ds-list-item>
+          </ng-container>
+        </ds-menu>
+      </div>
+      <div class="action-btn">
+        <button [ds-menu-trigger-for]="subMenu" ds-button ds-tooltip="" variant="outline" [icon]="'arrow_right_up'"></button>
+        <ds-menu #subMenu>
+          <ng-container>
+            <ds-list-item [class]="'vdcn-dropdown-menu-item'" (click)="onNavigateToKrViewer()">
+              <span>{{ 'app.kr_viewer' | translate }}</span>
+            </ds-list-item>
+            <ds-list-item [class]="'vdcn-dropdown-menu-item'">
+              <span>{{ 'app.ppt_reporting' | translate }}</span>
+            </ds-list-item>
+            <ds-list-item [class]="'vdcn-dropdown-menu-item'" (click)="navigateToCb2()">
+              <span>{{ 'homeSearch.caeBench2' | translate }}</span>
+            </ds-list-item>
+          </ng-container>
+        </ds-menu>
+      </div>
+    </div>
+  </div>
+</ng-container>

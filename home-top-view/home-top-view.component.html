@@ -1,0 +1,31 @@
+<div class="home_container">
+  <div>
+    <h2 class="greetings" *ngIf="!greetings?.name">Hi!</h2>
+    <h2 class="greetings" *ngIf="greetings?.name">{{ greetings.text | translate }}, {{ greetings.name }}!</h2>
+    <p class="home_info text-neutral">
+      {{ 'home.homeInfo' | translate }}
+    </p>
+  </div>
+  <div class="row mt20">
+    <ng-container *ngFor="let menuItem of topMenuItems?.items">
+      <div class="col-sm-2" *ngIf="menuItem.displayHome">
+        <a *ngIf="menuItem.showMenu" class="vdcn-menuItem" (click)="onMenuRouteChange(menuItem.route)">
+          <div class="body centered-content">
+            <svg-icon class="icon_info" data-testId="toggle-icon" [key]="getIconKey(menuItem.route)"></svg-icon>
+          </div>
+          <div class="footer centered-content">
+            {{ menuItem.title | translate }}
+          </div>
+        </a>
+      </div>
+    </ng-container>
+    <div class="col-sm-2 divide_menu">
+      <a class="vdcn-menuItem" target="_blank" href="{{ loadCaseUrl }}">
+        <div class="body centered-content">
+          <img class="icon_info" src="assets/icons/bmw_logo_white.svg" />
+        </div>
+        <div class="footer centered-content">{{ 'VSC Next' }}</div>
+      </a>
+    </div>
+  </div>
+</div>

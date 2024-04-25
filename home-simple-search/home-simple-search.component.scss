@@ -1,0 +1,21 @@
+:host {
+    ::ng-deep {
+      .ds-form-field__label__optional {
+        display: none;
+      }
+    }
+  
+    .ds-form-field {
+      margin-bottom: 10px;
+    }
+  
+  }
+.mrgn-top{
+  margin-top: 20px;
+}
+.search-btn{
+  margin-left: 5px;
+}
+.date-range{
+  margin-left: -95px;
+}

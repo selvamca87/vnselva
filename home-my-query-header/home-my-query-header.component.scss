@@ -1,0 +1,15 @@
+:host {
+  ::ng-deep {
+    .ds-form-field__label__optional {
+      display: none;
+    }
+  }
+
+  .ds-form-field {
+    margin-bottom: 10px;
+  }
+}
+
+.updatebtn {
+  margin-top: 20px;
+}

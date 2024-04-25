@@ -1,0 +1,110 @@
+<ng-container [formGroup]="parentForm">
+  <div (keyup.enter)="triggerSubmit()">
+    <div class="row">
+      <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6">
+        <ds-form-field>
+          <label ds-label for="name"> {{ 'fileManager.dialog.simpleSearch.name' | translate }}</label>
+          <input type="text" ds-input formControlName="name" id="name" />
+        </ds-form-field>
+      </div>
+      <div class="col-xl-2 col-lg-4 col-md-6 col-sm-6">
+        <ds-form-field>
+          <label ds-label for="loadCase"> {{ 'fileManager.dialog.simpleSearch.loadCase' | translate }}</label>
+          <input
+            id="loadCase"
+            ds-input
+            ds-autosuggest
+            formControlName="loadCase"
+            [numberOfFetchedItems]="100"
+            [customFilter]="loadCaseSuggestions"
+            [minCharsToFilter]="0"
+            [showSuggestionBoxOnFocus]="true"
+          />
+        </ds-form-field>
+      </div>
+      <div class="col-xl-2 col-lg-4 col-md-6 col-sm-12">
+        <ds-form-field>
+          <label ds-label for="vehicle"> {{ 'fileManager.dialog.simpleSearch.vehicle' | translate }}</label>
+          <input
+            id="vehicle"
+            ds-input
+            ds-autosuggest
+            formControlName="vehicle"
+            [customFilter]="vehicleSuggestions"
+            [minCharsToFilter]="0"
+            [showSuggestionBoxOnFocus]="true"
+            [numberOfFetchedItems]="100"
+          />
+        </ds-form-field>
+      </div>
+      <div class="col-xl-3 col-lg-8 col-md-6">
+        <div class="row">
+          <div class="col-xl-5 col-lg-5 col-md-5 col-sm-4">
+            <ds-form-field>
+              <label ds-label for="productLine"> {{ 'fileManager.dialog.simpleSearch.productLine' | translate }}</label>
+              <input
+                id="productLine"
+                ds-input
+                ds-autosuggest
+                formControlName="productLine"
+                [customFilter]="productLineSuggestions"
+                [minCharsToFilter]="0"
+                [showSuggestionBoxOnFocus]="true"
+                [numberOfFetchedItems]="100"
+              />
+            </ds-form-field>
+          </div>
+          <div class="col-xl-2 col-lg-2 col-md-2 col-sm-1">
+            <ds-button
+              class="mrgn-top"
+              (click)="showFilterOption(!showFilters)"
+              [disabled]="!!(showLoadingIndicator$ | async)"
+              [icon]="'filter_add'"
+              [variant]="showFilters ? 'primary' : 'outline'"
+              title="{{ 'fileManager.dialog.simpleSearch.addFilter' | translate }}"
+            ></ds-button>
+          </div>
+          <div class="col-xl-5 col-lg-5 col-md-5 col-sm-6">
+            <ds-form-field>
+              <label ds-label for="timePeriod">{{ 'fileManager.dialog.simpleSearch.dateRange' | translate }}</label>
+              <ds-select
+                formControlName="timePeriod"
+                [isFilterable]="false"
+                [options]="timePeriods || []"
+                id="timePeriod"
+                [placeholder]="'Date type'"
+              ></ds-select>
+            </ds-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-4 col-md-6">
+        <div class="row">
+          <div class="col-xl-8 col-lg-8 col-md-10 col-sm-4">
+            <ds-form-field>
+              <label ds-label for="type">{{ 'fileManager.dialog.simpleSearch.type' | translate }}</label>
+              <ds-select formControlName="type" [isFilterable]="false" [options]="queryTypes" id="type"></ds-select>
+            </ds-form-field>
+          </div>
+          <div [ngClass]="{ 'width-ten-percent': mobilescreen }" class="col-xl-2 col-lg-2 col-md-1 col-sm-1 mrgn-top">
+            <ds-button
+              [icon]="'clipboard'"
+              [variant]="'outline'"
+              (click)="copyToClipboard()"
+              title="{{ 'homeSearch.copyExprToClipboard' | translate }}"
+            ></ds-button>
+          </div>
+          <div [ngClass]="{ 'width-ten-percent': mobilescreen }" class="col-xl-2 col-lg-2 col-md-1 col-sm-1 mrgn-top">
+            <ds-button
+              (click)="onSubmit()"
+              class="search-btn"
+              [icon]="'search'"
+              [variant]="'outline'"
+              title="{{ 'homeSearch.search' | translate }}"
+            ></ds-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,112 @@
+<div *ngIf="results?.length === 0" class="nothing_found">
+  <h5>{{ 'krViewer.nothing_found' | translate }}...</h5>
+  <p>{{ 'homeSearch.my_default_results_help' | translate }}</p>
+</div>
+
+<ng-container>
+  <div class="items-container" *ngIf="results?.length > 0">
+    <table ds-table class="ds-table" [(config)]="tableConfig" (sort)="handleSort($event)">
+      <thead class="sticky-table-head-fav" ds-table-head>
+        <tr>
+          <th style="width: 2%" field="selected">
+            <input type="checkbox" [checked]="allFilteredSelected()" (change)="onSelectAllQueryItems()" />
+          </th>
+          <th style="width: 2%" field="favourite" ds-table-sort-header>
+            <i class="bi bi-heart-fill heart-icon-red" title="{{ 'homeSearch.favourite' | translate }}"></i>
+          </th>
+          <th ds-table-sort-header style="width: 18%" field="name">{{ 'homeSearch.name' | translate }}</th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 10%" field="type">{{ 'homeSearch.types' | translate }}</th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 14%" field="variant">{{ 'homeSearch.variant' | translate }}</th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 7%" field="phase">{{ 'homeSearch.phase' | translate }}</th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 9%" field="createdAtText">
+            {{ 'homeSearch.creationDate' | translate }}
+          </th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 9%" field="dateOfTest">{{ 'homeSearch.date' | translate }}</th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 12%" field="loadCaseCode">{{ 'homeSearch.loadcase' | translate }}</th>
+          <th ds-table-sort-header *ngIf="hideItems" style="width: 3%" field="keyResultCount">
+            {{ 'homeSearch.keyResultCount' | translate }}
+          </th>
+          <th style="width: 15%">{{ 'homeSearch.actions' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody style="line-break: anywhere">
+        <tr ds-table-row *ngFor="let item of results | favoritesFilter : filterTerm; trackBy: trackBy">
+          <td style="width: 2%">
+            <input type="checkbox" [ngModel]="item.selected" [ngModelOptions]="{ standalone: true }" (click)="onSelectFile(item)" />
+          </td>
+          <td style="width: 2%">
+            <i
+              class="bi bi-heart-fill"
+              (click)="onSetFavourite(item)"
+              [ngClass]="{ 'heart-icon-blue': !item.favourite, 'heart-icon-red': item.favourite }"
+              title="{{ 'homeSearch.setFavourite' | translate }}"
+            ></i>
+          </td>
+          <td style="width: 18%">{{ item.name }}</td>
+          <td *ngIf="hideItems" style="width: 10%">{{ item.type }}</td>
+          <td *ngIf="hideItems" style="width: 14%">{{ item.variant }}</td>
+          <td *ngIf="hideItems" style="width: 7%">{{ item.phase }}</td>
+          <td *ngIf="hideItems" style="width: 9%">{{ item.createdAtText }}</td>
+          <td *ngIf="hideItems" style="width: 9%">{{ item.dateOfTest || '' }}</td>
+          <td *ngIf="hideItems" style="width: 12%">
+            <a class="loadcase-link" (click)="openVscLoadcase(item.loadCaseCode)">{{ item.loadCaseCode || '' }}</a>
+          </td>
+          <td *ngIf="hideItems" style="width: 3%">{{ item.keyResultCount || '' }}</td>
+          <td style="width: 15%">
+            <svg-icon
+              [key]="'folder'"
+              [size]="'lg'"
+              class="btn-action-clr"
+              (click)="openFileManager(item)"
+              title="{{ 'app.filemanager' | translate }}"
+            ></svg-icon>
+            <svg-icon
+              *ngIf="item.type === 'PhysicalTestResult'"
+              [key]="'circle'"
+              [size]="'lg'"
+              class="btn-action btn-action-clr"
+              title="{{ 'homeSearch.openInEda' | translate }}"
+            ></svg-icon>
+            <svg-icon
+              *ngIf="item.type === 'PhysicalTestResult'"
+              [key]="'cloud_upload'"
+              [size]="'lg'"
+              class="btn-action btn-action-clr"
+              title="{{ 'app.classification_wizard' | translate }}"
+            ></svg-icon>
+            <svg-icon
+              [key]="'artboard'"
+              [size]="'lg'"
+              class="btn-action btn-action-clr"
+              (click)="onOpenKrViewer(item)"
+              title="{{ 'app.kr_viewer' | translate }}"
+            ></svg-icon>
+            <svg-icon
+              [key]="'list'"
+              [size]="'lg'"
+              class="btn-action btn-action-clr"
+              title="{{ 'app.ppt_reporting' | translate }}"
+            ></svg-icon>
+            <img
+              *ngIf="item.type === 'PhysicalTestResult'"
+              class="vsc-icon btn-action btn-action-clr"
+              src="assets/icons/bmw_logo.png"
+              (click)="openVscNext(item.name)"
+              title="{{ 'homeSearch.vscNext' | translate }}"
+            />
+            <img
+              class="cb2-icon btn-action btn-action-clr"
+              src="assets/icons/cb2_icon.svg"
+              (click)="openInCb2(item.oid)"
+              title="{{ 'homeSearch.openInCb2' | translate }}"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+<div class="badge vdcn-home-number-of-results">
+  {{ results?.length }} {{ 'fileManager.dialog.simpleSearch.results' | translate }} ({{ selectedQueryResult?.length }}
+  {{ 'fileManager.dialog.simpleSearch.selected' | translate }})
+</div>

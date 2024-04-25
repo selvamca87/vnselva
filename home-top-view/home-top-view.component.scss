@@ -1,0 +1,71 @@
+.home_container {
+  background: linear-gradient(0deg, rgb(131 129 137) 6%, rgb(220 220 231 / 88%) 44%, rgb(235 252 255) 100%);
+  border-radius: 0 !important;
+  height: 96%;
+  margin: 0 -15px;
+  padding-left: 100px;
+  padding-right: 60px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.home_info {
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 100;
+  margin-top: 14px;
+  line-height: 31px;
+}
+.vdcn-menuItem {
+  background: linear-gradient(163deg, #3c3737 6%, rgba(77, 77, 101, 0.8827906162464986) 44%, #3c96a8 100%);
+  border-radius: 25px;
+  display: block;
+}
+.vdcn-menuItem .body {
+  transform: translateY(40px);
+  font-size: 60px;
+  color: #fff;
+  height: 170px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  .icon_info {
+    width: 73px;
+    height: 100px;
+  }
+}
+.divide_menu {
+  border-left-style: solid;
+  color: white;
+}
+a,
+u {
+  text-decoration: none;
+}
+.greetings {
+  font-size: 27px;
+}
+
+.footer {
+  border-radius: 0 0 25px 25px;
+  background: #226d7e;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  padding: 25px;
+  font-size: 18px;
+}
+
+@media only screen and (min-width: 1048px) {
+  .footer {
+    height: 36px;
+  }
+}
+@media only screen and (min-width: 1048px) {
+  .home_container {
+    height: 96%;
+  }
+}
